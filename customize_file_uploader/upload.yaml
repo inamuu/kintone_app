@@ -1,0 +1,25 @@
+name: deploy a customeize file to kintone apop
+
+on:
+  push:
+    paths:
+      - 'kintone/example.js'
+
+jobs:
+  upload_kintone_deploy_button:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install library
+        run: npm install -g @kintone/customize-uploader
+      - name: Upload file
+        run: kintone-customize-uploader dest/customize-manifest.json
+        working-directory: ./kintone/
+        env:
+          KINTONE_BASE_URL: ${{ secrets.KINTONE_BASE_URL }}
+          KINTONE_USERNAME: ${{ secrets.KINTONE_USERNAME }}
+          KINTONE_PASSWORD: ${{ secrets.KINTONE_PASSWORD }}
